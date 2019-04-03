@@ -9,35 +9,24 @@
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(className) {
 
-  //Initialize variables
-  var resultsArray = [];
+    var resultsArray = [];
 
-  console.log(document.body.childNodes);
-
-  // If no body element, return null
-  if (document.body === null) {
-    return null;
-  } else {
-    // recursive helper function
-    searchChildNodes(document.body, className);
-  }
-  return resultsArray;
+    if (document.body === null) {
+        return null;
+    } else {
+        searchChildNodes(resultsArray, document.body, className);
+    }
+    return resultsArray;
 };
 
 
-// Recursive helper function to search childNodes as long as nodeList  length > 0
-var searchChildNodes = function (element, className) {
-  // console.log("Child Nodes:" + element.childNodes);
-  // console.log("NodeList Length:" + element.childNodes.length);
-  // console.log("Element:" + element);
-  // console.log("Class List:" + element.classList);
-  // console.log("Class Name:" + className);
-  // console.log(element.classList+"" === className);
-
-  if (element.classList+"" === className) {
-    console.log(element); // element
-  }
-  for (var i = 0; i < element.childNodes.length; i++){
-    searchChildNodes(element.childNodes[i], className);
-  }
+// Recursive helper function to search childNodes as long as nodeList length > 0. Adds nodes with class className to resultsArray.
+var searchChildNodes = function(resultsArray, element, className) {
+    if (element.classList !== undefined &&
+        element.classList.contains(className)) {
+        resultsArray.push(element);
+    }
+    element.childNodes.forEach(function(currentValue) { 
+      searchChildNodes(resultsArray, currentValue, className); 
+    });
 }
