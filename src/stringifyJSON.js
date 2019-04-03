@@ -52,4 +52,22 @@ var objToString = function(obj) {
       return "[" + result + "]";
     }
   }
+
+  // Handle objects
+  if (typeof(obj) === "object") {
+    // Base case: empty object
+    if (Object.keys(obj).length === 0) {
+      return "{}";}
+    else {
+      var result = "";
+      Object.keys(obj).forEach(function(currentValue, currentIndex) {
+        if (currentIndex !== Object.keys(obj).length-1) {
+          result += objToString(currentValue) + ":" + objToString(obj[currentValue]) + ",";
+        } else {
+          result += objToString(currentValue) + ":" + objToString(obj[currentValue]);
+        }
+      });
+      return "{" + result + "}";
+    }
+  }
 };
