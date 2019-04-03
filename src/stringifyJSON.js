@@ -5,44 +5,51 @@
 
 var stringifyJSON = function(obj) {
   console.log(typeof(obj));
-  console.log("Stringify:" + JSON.stringify(obj));
+  console.log("Stringify: " + JSON.stringify(obj));
 
-  // If obj is a simple value, add value to empty string and return
+  // recursive helper function
+  console.log("My result: " + objToString(obj));
+  return objToString(obj);
+};
+
+var objToString = function(obj) {
+  // Return 'undefined' for unstrigifiable objects
+  if (typeof(obj) === "undefined" || typeof(obj) === "function") { 
+    return "undefined";
+  }
+
+  // Return 'null' for null objects
   if (obj === null) {
       return "null";
   }
+
+  // Return strings for simple values and string literals
   if (typeof(obj) !== "object") {
     if (typeof(obj) === "string") {
-      return addQuotes(obj);;
+      return '"' + obj + '"'; // Add quotation marks around string literal
     }
     return "" + obj;
-  } else {
-    // recursive helper functions for array
-    if (Array.isArray(obj)) {
-      return "[" + arrayToString(obj) + "]";
-    } else { // recursive helper function for object
-      objectToString(obj);
+  }
+
+  // Handle arrays
+  if (typeof(obj) === "object" && Array.isArray(obj)) {
+    // Base case: empty array
+    if (obj.length === 0) { 
+      return "[]";} 
+    // Base case: array of length 1
+    else if (obj.length === 1) { 
+      return "[" + objToString(obj[0]) + "]"; }
+    // Recurse
+    else {
+      var result = "";
+      obj.forEach(function(currentValue, currentIndex) { 
+        if (currentIndex !== obj.length-1) {
+          result += objToString(currentValue) + ","; 
+        } else {
+          result += objToString(currentValue);
+        }
+      });
+      return "[" + result + "]";
     }
   }
 };
-
-// recursive helper functions to stringify array
-var arrayToString = function(obj) {
-  if (obj.length === 0) {
-    return "";
-  }
-  if (obj.length === 1) {
-    return typeof(obj[0]) === "string" ? addQuotes(obj[0]) : obj[0];
-  }
-  return "" + obj[0] + "," + arrayToString(obj.slice(1));
-}
-
-// recursive helper functions to stringify object
-var objectToString = function(obj) {
-
-}
-
-// helper function to add quotes to outside of string
-var addQuotes = function(string) {
-  return '"' + string + '"';
-}
