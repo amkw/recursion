@@ -13,7 +13,7 @@ var stringifyJSON = function(obj) {
   }
   if (typeof(obj) !== "object") {
     if (typeof(obj) === "string") {
-      return '"' + obj + '"';
+      return addQuotes(obj);;
     }
     return "" + obj;
   } else {
@@ -26,17 +26,23 @@ var stringifyJSON = function(obj) {
   }
 };
 
+// recursive helper functions to stringify array
 var arrayToString = function(obj) {
   if (obj.length === 0) {
     return "";
   }
   if (obj.length === 1) {
-    return obj[0];
+    return typeof(obj[0]) === "string" ? addQuotes(obj[0]) : obj[0];
   }
   return "" + obj[0] + "," + arrayToString(obj.slice(1));
 }
 
-
+// recursive helper functions to stringify object
 var objectToString = function(obj) {
 
+}
+
+// helper function to add quotes to outside of string
+var addQuotes = function(string) {
+  return '"' + string + '"';
 }
