@@ -8,13 +8,35 @@ var stringifyJSON = function(obj) {
   console.log("Stringify:" + JSON.stringify(obj));
 
   // If obj is a simple value, add value to empty string and return
-  if (typeof(obj !== "object")) {
+  if (obj === null) {
+      return "null";
+  }
+  if (typeof(obj) !== "object") {
     if (typeof(obj) === "string") {
-      // console.log(typeof(obj));
       return '"' + obj + '"';
     }
     return "" + obj;
   } else {
-    // recursive helper function for objects
+    // recursive helper functions for array
+    if (Array.isArray(obj)) {
+      return "[" + arrayToString(obj) + "]";
+    } else { // recursive helper function for object
+      objectToString(obj);
+    }
   }
 };
+
+var arrayToString = function(obj) {
+  if (obj.length === 0) {
+    return "";
+  }
+  if (obj.length === 1) {
+    return obj[0];
+  }
+  return "" + obj[0] + "," + arrayToString(obj.slice(1));
+}
+
+
+var objectToString = function(obj) {
+
+}
