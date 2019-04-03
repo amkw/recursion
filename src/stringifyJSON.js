@@ -4,20 +4,6 @@
 // but you don't so you're going to write it from scratch:
 
 var stringifyJSON = function(obj) {
-  console.log(typeof(obj));
-  console.log("Stringify: " + JSON.stringify(obj));
-
-  // recursive helper function
-  console.log("My result: " + objToString(obj));
-  return objToString(obj);
-};
-
-var objToString = function(obj) {
-  // Return 'undefined' for unstrigifiable objects
-  if (typeof(obj) === "undefined" || typeof(obj) === "function") { 
-    return "undefined";
-  }
-
   // Return 'null' for null objects
   if (obj === null) {
       return "null";
@@ -38,16 +24,13 @@ var objToString = function(obj) {
       return "[]";} 
     // Base case: array of length 1
     else if (obj.length === 1) { 
-      return "[" + objToString(obj[0]) + "]"; }
+      return "[" + stringifyJSON(obj[0]) + "]"; }
     // Recurse
     else {
       var result = "";
       obj.forEach(function(currentValue, currentIndex) { 
-        if (currentIndex !== obj.length-1) {
-          result += objToString(currentValue) + ","; 
-        } else {
-          result += objToString(currentValue);
-        }
+        result += stringifyJSON(currentValue);
+        (currentIndex !== obj.length-1) ? result += "," : result;
       });
       return "[" + result + "]";
     }
@@ -58,13 +41,16 @@ var objToString = function(obj) {
     // Base case: empty object
     if (Object.keys(obj).length === 0) {
       return "{}";}
+    // Recurse
     else {
       var result = "";
       Object.keys(obj).forEach(function(currentValue, currentIndex) {
-        if (currentIndex !== Object.keys(obj).length-1) {
-          result += objToString(currentValue) + ":" + objToString(obj[currentValue]) + ",";
-        } else {
-          result += objToString(currentValue) + ":" + objToString(obj[currentValue]);
+        // Skip key/value pairs for unstrigifiable objects
+        if (typeof(obj[currentValue]) === "function" || typeof(obj[currentValue]) === "undefined") {
+          result = ""}
+        else {
+          result += stringifyJSON(currentValue) + ":" + stringifyJSON(obj[currentValue]);
+          (currentIndex !== Object.keys(obj).length-1) ? result += "," : result;
         }
       });
       return "{" + result + "}";
